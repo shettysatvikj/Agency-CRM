@@ -14,15 +14,25 @@ import { notFound, errorHandler } from './middleware/errorHandler.js';
 const app = express();
 connectDB();
 
-app.use(helmet());
-app.use(express.json());
-app.use(cookieParser());
+// CORS FIRST
 app.use(
   cors({
-    origin: ENV.CLIENT_URL,
+    origin: "https://agency-crm-psi.vercel.app",
     credentials: true,
   })
 );
+
+app.options("*", cors());
+
+// THEN OTHER MIDDLEWARE
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
+
+app.use(express.json());
+app.use(cookieParser());
 if (ENV.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
