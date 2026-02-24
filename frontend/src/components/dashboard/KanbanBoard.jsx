@@ -20,28 +20,41 @@ const KanbanBoard = ({ leads, onStatusChange }) => {
     const { destination, source, draggableId } = result;
     if (!destination) return;
     if (destination.droppableId === source.droppableId) return;
+
     const newStatus = destination.droppableId;
     onStatusChange(draggableId, newStatus);
   };
 
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-full">
       <DragDropContext onDragEnd={onDragEnd}>
-        {/* Horizontal scroll ONLY inside this container */}
-        <div className="flex gap-5 overflow-x-auto pb-4 mt-6 w-full">
+        {/* Scroll Container */}
+        <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 mt-6 w-full scroll-smooth">
+          
           {columns.map((col) => (
             <Droppable droppableId={col.status} key={col.status}>
               {(provided) => (
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className={`flex-shrink-0 w-[260px] bg-gradient-to-br ${statusStyles[col.status]} rounded-2xl border p-4 shadow-md transition-all duration-300`}
+                  className={`
+                    flex-shrink-0
+                    w-[85vw] sm:w-[320px] lg:w-[340px]
+                    max-w-[340px]
+                    min-h-[400px]
+                    bg-gradient-to-br ${statusStyles[col.status]}
+                    rounded-2xl border
+                    p-4 sm:p-5
+                    shadow-md
+                    transition-all duration-300
+                  `}
                 >
                   {/* Column Header */}
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-sm font-semibold uppercase tracking-wide">
+                    <h3 className="text-xs sm:text-sm font-semibold uppercase tracking-wide">
                       {col.status}
                     </h3>
+
                     <span className="text-xs bg-white/70 px-2 py-1 rounded-full shadow-sm">
                       {col.items.length}
                     </span>
@@ -60,22 +73,26 @@ const KanbanBoard = ({ leads, onStatusChange }) => {
                             ref={dragProvided.innerRef}
                             {...dragProvided.draggableProps}
                             {...dragProvided.dragHandleProps}
-                            className={`rounded-xl bg-white p-4 shadow-sm border border-gray-100 text-sm transition-all duration-200 hover:shadow-md ${
-                              snapshot.isDragging
-                                ? 'ring-2 ring-indigo-400'
-                                : ''
-                            }`}
+                            className={`
+                              rounded-xl bg-white
+                              p-3 sm:p-4
+                              shadow-sm border border-gray-100
+                              text-xs sm:text-sm
+                              transition-all duration-200
+                              hover:shadow-md
+                              ${snapshot.isDragging ? 'ring-2 ring-indigo-400 scale-[1.02]' : ''}
+                            `}
                           >
-                            <div className="font-semibold text-gray-800">
+                            <div className="font-semibold text-gray-800 truncate">
                               {lead.name}
                             </div>
 
-                            <div className="text-gray-500 text-xs mt-1 truncate">
+                            <div className="text-gray-500 text-[11px] sm:text-xs mt-1 truncate">
                               {lead.email || lead.phone}
                             </div>
 
                             {lead.budget ? (
-                              <div className="text-xs text-gray-600 mt-2 font-medium">
+                              <div className="text-[11px] sm:text-xs text-gray-600 mt-2 font-medium">
                                 💰 ₹
                                 {Number(lead.budget).toLocaleString('en-IN')}
                               </div>

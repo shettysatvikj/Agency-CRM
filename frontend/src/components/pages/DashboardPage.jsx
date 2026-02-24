@@ -83,18 +83,18 @@ const DashboardPage = () => {
   const kpis = analytics?.kpis || {};
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50 via-white to-blue-50 min-h-full">
-      <div className="px-8 py-8 space-y-8">
+    <div className="min-h-full bg-gradient-to-br from-indigo-50 via-white to-blue-50">
+      <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
 
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="flex justify-between items-center"
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
         >
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
               Welcome back 👋
             </h1>
             <p className="text-sm text-gray-500 mt-1">
@@ -102,10 +102,10 @@ const DashboardPage = () => {
             </p>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <button
               onClick={handleExportCSV}
-              className="flex items-center gap-2 px-4 py-2 text-sm rounded-xl border bg-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+              className="flex items-center gap-2 px-4 py-2 text-sm rounded-xl border bg-white shadow-sm hover:shadow-md transition-all"
             >
               <Download size={16} />
               Export CSV
@@ -116,7 +116,7 @@ const DashboardPage = () => {
                 setEditingLead(null);
                 setLeadFormOpen(true);
               }}
-              className="flex items-center gap-2 px-4 py-2 text-sm rounded-xl bg-indigo-600 text-white shadow hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5 transition-all"
+              className="flex items-center gap-2 px-4 py-2 text-sm rounded-xl bg-indigo-600 text-white shadow hover:bg-indigo-700 transition-all"
             >
               <Plus size={16} />
               Add Lead
@@ -129,7 +129,7 @@ const DashboardPage = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
         >
           <KPICard label="Total Leads" value={kpis.totalLeads ?? '-'} accent="blue" />
           <KPICard label="Qualified Leads" value={kpis.qualifiedLeads ?? '-'} accent="green" />
@@ -141,6 +141,7 @@ const DashboardPage = () => {
           />
         </motion.div>
 
+        {/* Filters */}
         <LeadFilters
           status={filters.status}
           source={filters.source}
@@ -148,6 +149,7 @@ const DashboardPage = () => {
           onChange={handleFilterChange}
         />
 
+        {/* Content */}
         {loading ? (
           <div className="bg-white rounded-2xl shadow-sm p-10 text-center text-gray-500 animate-pulse">
             Loading your leads...
@@ -172,18 +174,24 @@ const DashboardPage = () => {
               }}
             />
 
+            {/* Kanban */}
             <div>
               <h3 className="text-sm font-semibold text-gray-700 mb-4">
                 Kanban View
               </h3>
-              <KanbanBoard leads={leads} onStatusChange={handleStatusChange} />
+              <KanbanBoard
+                leads={leads}
+                onStatusChange={handleStatusChange}
+              />
             </div>
 
+            {/* Charts */}
             <ChartsPanel analytics={analytics} />
           </motion.div>
         )}
       </div>
 
+      {/* Modals */}
       <LeadFormModal
         open={leadFormOpen}
         onClose={() => {

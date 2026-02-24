@@ -16,11 +16,11 @@ const LeadsTable = ({
   };
 
   return (
-    <div className="w-full overflow-hidden mt-6">
-      <div className="w-full overflow-x-auto rounded-2xl border border-gray-100 bg-white shadow-sm">
+    <div className="w-full mt-6">
+
+      {/* ================= DESKTOP TABLE ================= */}
+      <div className="hidden md:block w-full overflow-x-auto rounded-2xl border border-gray-100 bg-white shadow-sm">
         <table className="w-full text-sm">
-          
-          {/* Header */}
           <thead className="bg-gradient-to-r from-gray-50 to-gray-100 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">
             <tr>
               <th className="px-4 py-4">Name</th>
@@ -40,29 +40,24 @@ const LeadsTable = ({
                 key={lead._id}
                 className="hover:bg-indigo-50/40 transition-colors duration-200"
               >
-                {/* Name */}
                 <td className="px-4 py-4 font-medium text-gray-800">
                   {lead.name}
                 </td>
 
-                {/* Email */}
-                <td className="px-4 py-4 text-gray-600 truncate max-w-[160px]">
+                <td className="px-4 py-4 text-gray-600 truncate max-w-[180px]">
                   {lead.email || '-'}
                 </td>
 
-                {/* Phone */}
                 <td className="px-4 py-4 text-gray-600">
                   {lead.phone || '-'}
                 </td>
 
-                {/* Source */}
                 <td className="px-4 py-4">
                   <span className="px-2 py-1 text-xs rounded-full bg-slate-100 text-slate-600">
                     {lead.source}
                   </span>
                 </td>
 
-                {/* Status */}
                 <td className="px-4 py-4">
                   <select
                     value={lead.status}
@@ -75,19 +70,16 @@ const LeadsTable = ({
                   </select>
                 </td>
 
-                {/* Budget */}
                 <td className="px-4 py-4 font-medium text-gray-700">
                   {lead.budget
                     ? `₹${Number(lead.budget).toLocaleString('en-IN')}`
                     : '-'}
                 </td>
 
-                {/* Created */}
                 <td className="px-4 py-4 text-gray-500">
                   {new Date(lead.createdAt).toLocaleDateString('en-IN')}
                 </td>
 
-                {/* Actions */}
                 <td className="px-4 py-4 text-right space-x-2">
                   <button
                     onClick={() => onOpenNotes(lead)}
@@ -113,7 +105,6 @@ const LeadsTable = ({
               </tr>
             ))}
 
-            {/* Empty State */}
             {leads.length === 0 && (
               <tr>
                 <td
@@ -126,6 +117,83 @@ const LeadsTable = ({
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* ================= MOBILE CARD VIEW ================= */}
+      <div className="md:hidden space-y-4">
+        {leads.map((lead) => (
+          <div
+            key={lead._id}
+            className="rounded-2xl border border-gray-100 bg-white shadow-sm p-4 space-y-3"
+          >
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="font-semibold text-gray-800 text-sm">
+                  {lead.name}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {lead.email || lead.phone || '-'}
+                </p>
+              </div>
+
+              <span className="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-600">
+                {lead.source}
+              </span>
+            </div>
+
+            <div className="flex justify-between text-xs text-gray-600">
+              <span>
+                Budget:{' '}
+                {lead.budget
+                  ? `₹${Number(lead.budget).toLocaleString('en-IN')}`
+                  : '-'}
+              </span>
+
+              <span>
+                {new Date(lead.createdAt).toLocaleDateString('en-IN')}
+              </span>
+            </div>
+
+            <select
+              value={lead.status}
+              onChange={(e) => onStatusChange(lead._id, e.target.value)}
+              className={`w-full text-xs rounded-xl border px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-200 transition-all ${statusColors[lead.status]}`}
+            >
+              {statusOptions.map((s) => (
+                <option key={s}>{s}</option>
+              ))}
+            </select>
+
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={() => onOpenNotes(lead)}
+                className="flex-1 text-xs px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors"
+              >
+                Notes
+              </button>
+
+              <button
+                onClick={() => onEdit(lead)}
+                className="flex-1 text-xs px-3 py-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors"
+              >
+                Edit
+              </button>
+
+              <button
+                onClick={() => onDelete(lead._id)}
+                className="flex-1 text-xs px-3 py-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+
+        {leads.length === 0 && (
+          <div className="text-center text-sm text-gray-500 italic py-10">
+            No leads found. Start by adding your first lead 🚀
+          </div>
+        )}
       </div>
     </div>
   );
