@@ -22,7 +22,7 @@ app.use(
   })
 );
 
-app.options("*", cors());
+app.options("/", cors());
 
 // THEN OTHER MIDDLEWARE
 app.use(

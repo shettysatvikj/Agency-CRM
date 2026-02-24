@@ -1,28 +1,13 @@
 import { Menu } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 const Header = ({ toggleSidebar }) => {
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="
-        h-16 
-        bg-white 
-        border-b border-gray-100 
-        flex items-center justify-between 
-        px-4 sm:px-6
-        shadow-sm
-      "
-    >
-      {/* Left Section */}
-      <div className="flex items-center gap-3">
+    <header className="h-16 bg-white border-b flex items-center justify-between px-4 sm:px-6 shadow-sm">
 
-        {/* Hamburger (Mobile Only) */}
+      <div className="flex items-center gap-3">
         <button
           onClick={toggleSidebar}
-          className="lg:hidden p-2 rounded-md hover:bg-gray-100 transition"
+          className="lg:hidden p-2 rounded hover:bg-gray-100"
         >
           <Menu size={20} />
         </button>
@@ -32,11 +17,10 @@ const Header = ({ toggleSidebar }) => {
         </h1>
       </div>
 
-      {/* Right Section */}
-      <div className="text-sm text-gray-500 hidden sm:block">
+      <div className="hidden sm:block text-sm text-gray-500">
         Welcome back 👋
       </div>
-    </motion.header>
+    </header>
   );
 };
 
